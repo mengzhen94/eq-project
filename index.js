@@ -5,17 +5,10 @@ const app = express()
 // configs come from standard PostgreSQL env vars
 // https://www.postgresql.org/docs/9.6/static/libpq-envars.html
 const pool = new pg.Pool()
-/*
-const queryHandler1 = (req, res, next) => {
-  pool.query(req.sqlQuery).then((r) => {
-    return res.json(r.rows || [])
-  }).catch(next)
-}
-*/
 
 const queryHandler = (req, res, next) => {
   pool.query(req.sqlQuery).then((r) => {
-    // if events is NULL, drop the column
+    // if events is NULL, drop the property
     r.rows.map((row) => { if(row.events === null) return delete row.events});
     return res.json(r.rows || [])
   }).catch(next)
@@ -37,6 +30,10 @@ app.get('/events/hourly', (req, res, next) => {
 }, queryHandler)
 
 app.get('/stats/hourly', (req, res, next) => {
+  // use: /stats/hourly/?page=2&size=30
+  let size = req.query.size || 20;
+  let page = req.query.page || 1;
+  let offset = size * (page - 1)
   req.sqlQuery = `
     SELECT date, hour,
         SUM(impressions) AS impressions,
@@ -45,7 +42,7 @@ app.get('/stats/hourly', (req, res, next) => {
     FROM public.hourly_stats
     GROUP BY date, hour
     ORDER BY date, hour
-    LIMIT 168;
+    LIMIT ${size} OFFSET ${offset};
   `
   return next()
 }, queryHandler)
