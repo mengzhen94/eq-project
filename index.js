@@ -11,10 +11,26 @@ app.use(express.static(path.join(__dirname, 'client/build')));
 // https://www.postgresql.org/docs/9.6/static/libpq-envars.html
 const pool = new pg.Pool()
 
+// Format Date Data
+const formatOptions = {
+    weekday: "long", year: "numeric", month: "short",
+    day: "numeric", hour: "2-digit", minute: "2-digit"
+};
+
 const queryHandler = (req, res, next) => {
   pool.query(req.sqlQuery).then((r) => {
-    // if events is NULL, drop the property
-    r.rows.map((row) => { if(row.events === null) return delete row.events});
+    // Format data
+    r.rows.forEach(row => {
+      row.date = row.date.toUTCString()
+      if(row.hasOwnProperty('events')) {
+        if(row.events === null) delete row.events
+        else row.events = parseInt(row.events)
+      }
+      if(row.hasOwnProperty('impressions')) row.impressions = parseInt(row.impressions)
+      if(row.hasOwnProperty('revenue')) row.revenue = parseFloat(row.revenue)
+      if(row.hasOwnProperty('clicks')) row.clicks = parseInt(row.clicks)
+    })
+
     return res.json(r.rows || [])
   }).catch(next)
 }

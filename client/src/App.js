@@ -5,10 +5,8 @@ class App extends Component {
 
   render() {
     return (
-      <div className="App">
-        <div className="App-header">
-          <h2>Welcome to Datasets</h2>
-        </div>
+      <div>
+        <h2>Welcome to Datasets</h2>
       </div>
     );
   }
