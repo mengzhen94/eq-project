@@ -36,7 +36,7 @@ app.get('/events/hourly', (req, res, next) => {
 
 app.get('/stats/hourly', (req, res, next) => {
   // use: /stats/hourly/?page=2&size=30
-  let size = req.query.size || 20;
+  let size = req.query.size || 168;
   let page = req.query.page || 1;
   let offset = size * (page - 1)
   req.sqlQuery = `
