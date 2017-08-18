@@ -1,7 +1,12 @@
 const express = require('express')
 const pg = require('pg')
+const path = require('path')
 
 const app = express()
+
+// Serve static files from the React app
+app.use(express.static(path.join(__dirname, 'client/build')));
+
 // configs come from standard PostgreSQL env vars
 // https://www.postgresql.org/docs/9.6/static/libpq-envars.html
 const pool = new pg.Pool()
@@ -121,6 +126,12 @@ app.get('/daily', (req, res, next) => {
   `
   return next()
 }, queryHandler)
+
+// The "catchall" handler: for any request that doesn't
+// match one above, send back React's index.html file.
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname+'/client/build/index.html'));
+});
 
 app.listen(process.env.PORT || 5555, (err) => {
   if (err) {
