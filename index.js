@@ -5,27 +5,37 @@ const path = require('path')
 const app = express()
 
 // Serve static files from the React app
-app.use(express.static(path.join(__dirname, 'client/build')));
+app.use(express.static(path.join(__dirname, 'client/build')))
 
 // configs come from standard PostgreSQL env vars
 // https://www.postgresql.org/docs/9.6/static/libpq-envars.html
 const pool = new pg.Pool()
 
-// Format Date Data
-const formatOptions = {
-    weekday: "long", year: "numeric", month: "short",
-    day: "numeric", hour: "2-digit", minute: "2-digit"
-};
+// Date-Formating
+const options = { weekday: 'short', month: 'short', day: 'numeric' };
 
 const queryHandler = (req, res, next) => {
   pool.query(req.sqlQuery).then((r) => {
     // Format data
     r.rows.forEach(row => {
+      // Combine date and hour to get time
+      if(row.hasOwnProperty('hour')) {
+        row.time = row.date.toLocaleString('en-US', options) + ', ' + ('0' + row.hour).slice(-2) + ':00'
+      } else row.time = row.date.toLocaleString('en-US', options)
+      // Format time from 2017-01-01T00:00:00.000Z to Sun, 01 Jan 2017 00:00:00 GMT
       row.date = row.date.toUTCString()
+      // if event is NULL, delete the property
       if(row.hasOwnProperty('events')) {
-        if(row.events === null) delete row.events
-        else row.events = parseInt(row.events)
+        if(row.events === null) {
+          delete row.events
+          row.eventNum = 0
+        }
+        else {
+          row.events = parseInt(row.events)
+          row.eventNum = parseInt(row.events)
+        }
       }
+
       if(row.hasOwnProperty('impressions')) row.impressions = parseInt(row.impressions)
       if(row.hasOwnProperty('revenue')) row.revenue = parseFloat(row.revenue)
       if(row.hasOwnProperty('clicks')) row.clicks = parseInt(row.clicks)

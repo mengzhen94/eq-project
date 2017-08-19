@@ -1,6 +1,14 @@
 import React, { Component } from 'react';
 import ReactTable from "react-table";
 import "react-table/react-table.css";
+import {
+  AreaChart,
+  Area,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip
+} from 'recharts';
 
 class Hourly extends Component {
 
@@ -19,6 +27,38 @@ class Hourly extends Component {
         <div className="StatsHourly-header">
           <h2>Stats&Events Hourly Data</h2>
         </div>
+        <h4>Hourly Events</h4>
+        <AreaChart width={800} height={400} data={stats} margin={{top: 10, right: 30, left: 30, bottom: 10}}>
+          <XAxis dataKey="time" />
+          <YAxis/>
+          <CartesianGrid />
+          <Tooltip/>
+          <Area type='monotone' dataKey='eventNum' stroke='#8884d8' fill='#8884d8' />
+        </AreaChart>
+        <h4>Hourly Clicks</h4>
+        <AreaChart width={800} height={400} data={stats} margin={{top: 10, right: 30, left: 30, bottom: 10}}>
+          <XAxis dataKey="time"/>
+          <YAxis/>
+          <CartesianGrid />
+          <Tooltip/>
+          <Area type='monotone' dataKey='clicks' stroke='#8884d8' fill='#8884d8' />
+        </AreaChart>
+        <h4>Hourly Impressions</h4>
+        <AreaChart width={800} height={400} data={stats} margin={{top: 10, right: 30, left: 30, bottom: 10}}>
+          <XAxis dataKey="time"/>
+          <YAxis/>
+          <CartesianGrid />
+          <Tooltip/>
+          <Area type='monotone' dataKey='impressions' stroke='#8884d8' fill='#8884d8' />
+        </AreaChart>
+        <h4>Hourly Revenue</h4>
+        <AreaChart width={800} height={400} data={stats} margin={{top: 10, right: 30, left: 30, bottom: 10}}>
+          <XAxis dataKey="time"/>
+          <YAxis/>
+          <CartesianGrid />
+          <Tooltip/>
+          <Area type='monotone' dataKey='revenue' stroke='#8884d8' fill='#8884d8' />
+        </AreaChart>
         <ReactTable
           data={stats}
           columns={[
