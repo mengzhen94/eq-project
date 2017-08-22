@@ -7,10 +7,11 @@ const app = express()
 const limiter = new RateLimit()
 
 // Serve static files from the React app
-app.use(express.static(path.join(__dirname, 'client/build')))
+app.use(express.static(path.join(__dirname, '..', 'build')))
 
 // configs come from standard PostgreSQL env vars
 // https://www.postgresql.org/docs/9.6/static/libpq-envars.html
+
 const pool = new pg.Pool()
 
 // Date-Formating
@@ -49,10 +50,6 @@ const queryHandler = (req, res, next) => {
 
 app.get('/', (req, res) => {
   res.send('Welcome to EQ Works 😎')
-})
-
-app.get('/error', (req, res) => {
-  res.sendFile(path.join(__dirname, 'client/build', 'index.html'));
 })
 
 app.get('/events/hourly', (req, res, next) => {
@@ -163,7 +160,7 @@ app.get('/daily', (req, res, next) => {
 // The "catchall" handler: for any request that doesn't
 // match one above, send back React's index.html file.
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname+'/client/build/index.html'));
+  res.sendFile(path.join(__dirname, '..', 'build', 'index.html'));
 });
 
 app.listen(process.env.PORT || 5555, (err) => {

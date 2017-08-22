@@ -9,7 +9,6 @@ import {
   CartesianGrid,
   Tooltip
 } from 'recharts';
-import { scaleTime } from 'd3-scale';
 
 class EventsHourly extends Component {
 
