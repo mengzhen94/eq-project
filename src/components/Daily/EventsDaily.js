@@ -15,7 +15,7 @@ class EventsDaily extends Component {
   state = {events: []}
 
   componentDidMount() {
-    fetch('/events/daily')
+    fetch('/data/events/daily')
       .then(res => res.json())
       .then(events => this.setState({ events }));
   }

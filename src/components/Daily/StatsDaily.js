@@ -15,7 +15,7 @@ class StatsDaily extends Component {
   state = {stats: []}
 
   componentDidMount() {
-    fetch(`/stats/daily`,)
+    fetch(`/data/stats/daily`,)
       .then(res => res.json())
       .then(stats => this.setState({ stats }))
   }

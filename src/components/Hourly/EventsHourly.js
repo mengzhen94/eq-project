@@ -15,7 +15,7 @@ class EventsHourly extends Component {
   state = {events: []}
 
   componentDidMount() {
-    fetch('/events/hourly')
+    fetch('/data/events/hourly')
       .then(res => res.json())
       .then(events => this.setState({ events }));
   }

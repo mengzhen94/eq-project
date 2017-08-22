@@ -15,7 +15,7 @@ class Hourly extends Component {
   state = {stats: []}
 
   componentDidMount() {
-    fetch(`/hourly`,)
+    fetch(`/data/hourly`,)
       .then(res => res.json())
       .then(stats => this.setState({ stats }))
   }

@@ -48,11 +48,11 @@ const queryHandler = (req, res, next) => {
   }).catch(next)
 }
 
-app.get('/', (req, res) => {
+app.get('/data', (req, res) => {
   res.send('Welcome to EQ Works 😎')
 })
 
-app.get('/events/hourly', (req, res, next) => {
+app.get('/data/events/hourly', (req, res, next) => {
   req.sqlQuery = `
     SELECT date, hour, SUM(events) AS events
     FROM public.hourly_events
@@ -64,7 +64,7 @@ app.get('/events/hourly', (req, res, next) => {
 }, queryHandler)
 
 // Apply Rate limiter to '/stats/hourly' endpoints
-app.get('/stats/hourly', limiter, (req, res, next) => {
+app.get('/data/stats/hourly', limiter, (req, res, next) => {
   // use: /stats/hourly/?page=2&size=30
   let size = req.query.size || 168;
   let page = req.query.page || 1;
@@ -82,7 +82,7 @@ app.get('/stats/hourly', limiter, (req, res, next) => {
   return next()
 }, queryHandler)
 
-app.get('/hourly', (req, res, next) => {
+app.get('/data/hourly', (req, res, next) => {
   req.sqlQuery = `
     SELECT
         SUM(clicks) AS clicks,
@@ -102,7 +102,7 @@ app.get('/hourly', (req, res, next) => {
 }, queryHandler)
 
 
-app.get('/events/daily', (req, res, next) => {
+app.get('/data/events/daily', (req, res, next) => {
   req.sqlQuery = `
     SELECT date, SUM(events) AS events
     FROM public.hourly_events
@@ -114,7 +114,7 @@ app.get('/events/daily', (req, res, next) => {
 }, queryHandler)
 
 
-app.get('/stats/daily', (req, res, next) => {
+app.get('/data/stats/daily', (req, res, next) => {
   req.sqlQuery = `
     SELECT date,
         SUM(impressions) AS impressions,
@@ -128,7 +128,7 @@ app.get('/stats/daily', (req, res, next) => {
   return next()
 }, queryHandler)
 
-app.get('/daily', (req, res, next) => {
+app.get('/data/daily', (req, res, next) => {
   req.sqlQuery = `
     SELECT
       SUM(clicks) AS clicks,

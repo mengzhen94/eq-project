@@ -23,7 +23,7 @@ class StatsHourly extends Component {
     const params = new URLSearchParams(search)
     const page = params.get('page') || 1 // page
     const size = params.get('size') || 168 // size
-    fetch(`/stats/hourly?page=${page}&size=${size}`)
+    fetch(`/data/stats/hourly?page=${page}&size=${size}`)
       .then(res => res.json())
       .then(resJson => {
         if(Array.isArray(resJson)){
