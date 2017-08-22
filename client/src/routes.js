@@ -14,6 +14,7 @@ import EventsDaily from './components/Daily/EventsDaily';
 import StatsDaily from './components/Daily/StatsDaily';
 import Daily from './components/Daily/Daily';
 import NotMatch from './components/NotMatch';
+import RateLimited from './components/RateLimited';
 
 const Routes = () => (
   <Router>

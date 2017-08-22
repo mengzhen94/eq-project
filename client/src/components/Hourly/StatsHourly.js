@@ -12,22 +12,33 @@ import {
 
 class StatsHourly extends Component {
 
-  state = {stats: []}
+  state = {
+    stats: [],
+    message: ""
+  }
+
 
   componentDidMount() {
     const search = this.props.location.search // could be '?page=2&size=10'
     const params = new URLSearchParams(search)
     const page = params.get('page') || 1 // page
     const size = params.get('size') || 168 // size
-    fetch(`/stats/hourly?page=${page}&size=${size}`,)
+    fetch(`/stats/hourly?page=${page}&size=${size}`)
       .then(res => res.json())
-      .then(stats => this.setState({ stats }))
+      .then(resJson => {
+        if(Array.isArray(resJson)){
+          this.setState({ stats : resJson})
+        }else{
+          this.setState({ message : resJson})
+        }
+      })
   }
 
   render() {
-    const { stats } = this.state;
+    const { stats, message } = this.state;
     return (
       <div className="StatsHourly">
+        <h4 className="Error">{message}</h4>
         <div className="StatsHourly-header">
           <h2>Stats Hourly Data</h2>
         </div>

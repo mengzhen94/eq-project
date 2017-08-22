@@ -23,7 +23,7 @@
   to { transform: rotate(360deg); }
 }
 
-h1, h2, h3, h4 {
+h1, h2, h3, h4, h5 {
   text-align: center;
 }
 
@@ -35,4 +35,11 @@ h1, h2, h3, h4 {
   width: 80%;
   margin : 0 auto;
   text-align: center;
+}
+
+.Error {
+  background-color: #f7bcbc;
+  color: #ff0101;
+  width: 80%;
+  margin: 0 auto;
 }

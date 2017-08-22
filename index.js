@@ -1,8 +1,10 @@
 const express = require('express')
 const pg = require('pg')
 const path = require('path')
+const RateLimit = require('./rate-limiter/rateLimit')
 
 const app = express()
+const limiter = new RateLimit()
 
 // Serve static files from the React app
 app.use(express.static(path.join(__dirname, 'client/build')))
@@ -49,6 +51,10 @@ app.get('/', (req, res) => {
   res.send('Welcome to EQ Works 😎')
 })
 
+app.get('/error', (req, res) => {
+  res.sendFile(path.join(__dirname, 'client/build', 'index.html'));
+})
+
 app.get('/events/hourly', (req, res, next) => {
   req.sqlQuery = `
     SELECT date, hour, SUM(events) AS events
@@ -60,7 +66,8 @@ app.get('/events/hourly', (req, res, next) => {
   return next()
 }, queryHandler)
 
-app.get('/stats/hourly', (req, res, next) => {
+// Apply Rate limiter to '/stats/hourly' endpoints
+app.get('/stats/hourly', limiter, (req, res, next) => {
   // use: /stats/hourly/?page=2&size=30
   let size = req.query.size || 168;
   let page = req.query.page || 1;
