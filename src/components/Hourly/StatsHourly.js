@@ -17,12 +17,33 @@ class StatsHourly extends Component {
     message: ""
   }
 
-
+  /*
+  fetchOk(api) {
+    return fetch(api).then(res => res.ok ? res : res.json().then(err => Promise.reject(err)));
+  }
+  */
   componentDidMount() {
     const search = this.props.location.search // could be '?page=2&size=10'
     const params = new URLSearchParams(search)
     const page = params.get('page') || 1 // page
     const size = params.get('size') || 168 // size
+    /*
+    this.fetchOk(`/data/stats/hourly?page=${page}&size=${size}`)
+      .then(res => res.json())
+      .then(stats => this.setState({ stats : stats}))
+      .catch(error => this.setState({ message : error.message}))
+    */
+
+    fetch(`/data/stats/hourly?page=${page}&size=${size}`)
+      .then(res => {
+        if (res.ok) {
+          res.json().then(stats => this.setState({ stats : stats}))
+        }else {
+          res.json().then(mess => this.setState({ message : mess.message}))
+        }
+      })
+
+    /*
     fetch(`/data/stats/hourly?page=${page}&size=${size}`)
       .then(res => res.json())
       .then(resJson => {
@@ -32,6 +53,7 @@ class StatsHourly extends Component {
           this.setState({ message : resJson})
         }
       })
+    */
   }
 
   render() {

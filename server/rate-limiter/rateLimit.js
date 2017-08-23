@@ -19,7 +19,7 @@ function RateLimit() {
         // Error message
         message : 'Too many requests, please try again later.',
         // If return error, the status should be 429
-        // statusCode: 429
+        statusCode: 429
     }
 
     let clicks = {}
@@ -32,7 +32,8 @@ function RateLimit() {
         res.setHeader('X-RateLimit-Remaining', Math.max(options.max - clicks[key], 0))
 
         if (clicks[key] > options.max) {
-          return res.json(options.message)
+          //return res.json(options.message)
+          return res.status(options.statusCode).json({ message: options.message });
         }
 
         next()
